@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Agu+Display&family=Bigshot+One&family=Boldonse&family=Codystar:wght@300;400&family=Edu+VIC+WA+NT+Beginner:wght@400..700&family=Hubot+Sans:ital,wght@0,200..900;1,200..900&family=Keania+One&family=Krona+One&family=Major+Mono+Display&family=Metamorphous&family=Montserrat+Alternates:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Nabla&family=Nosifer&family=Nova+Script&family=Offside&family=Reenie+Beanie&family=Revalia&family=Ruslan+Display&family=SUSE:wght@100..800&family=Sankofa+Display&family=Share+Tech+Mono&family=Slackey&family=Sono:wght,MONO@200..800,0..1&family=Supermercado+One&family=Syne+Mono&family=Unbounded:wght@200..900&family=Unica+One&family=Vast+Shadow&family=Zhi+Mang+Xing&display=swap" rel="stylesheet">
+    <title>Project F</title>
+    <link rel="stylesheet" href="styles2.css">
+
+</head>
+<body>  
+    <div>
+        <canvas id="myCanvas" width="380" height="670"></canvas>
+
+        <!-- Start screen overlay -->
+        <div id="start-screen">
+
+            <h1>
+            <span id="gameName1">Poject</span> <span id="gameName2">F</span>
+            </h1>
+
+            <div id="start-bird" aria-hidden="true">
+            <img src="/Code 7/Project F/raven.png" alt="Flappy Bird" width="100">
+            </div>
+
+            <br>
+
+            <p>
+            Tap or press Space/Up to flap. Try to pass the pipes for points!
+            </p>
+
+            <br>
+
+            <!-- Start Game Button -->
+            <button id="start-btn">Start</button>
+</div>
+
+        </div>
+        <!-- Score display -->
+        <div id="score" aria-live="polite" aria-atomic="true">0</div>
+        <!-- Game Over Screen -->
+        <div id="game-over" role="alertdialog" aria-modal="true" aria-hidden="true">
+            <h1>Game Over</h1>
+
+            <br>
+
+            <p>Your score: <span id="final-score">0</span></p>
+
+            <br>
+
+            <!-- Restart Game Button -->
+            <button id="restart-btn" aria-label="Restart Game Button">
+            Restart
+            </button>
+            <br>
+        </div>
+    </div>
+
+    
+    <!-- Controls for animation selection -->
+    <!--<div class="controls">
+        <label for="animations">Choose Animation:</label>
+        <select id="animations">-->
+            <!--<option value="idle">Idle</option>-->
+            <!--<option value="fly">Fly</option>
+        </select>
+    </div>-->
+
+    <!-- Audio elements -->
+    <!-- Background music -->
+    <audio id="bg-music" loop preload="auto" src="/Code 7/acousticGuitar_bgMusic.mp3"></audio>
+    <!-- Flap sound -->
+    <audio id="flap-sound" preload="auto"></audio>
+    <!-- Score sound -->
+    <audio id="score-sound" preload="auto" src="/Code 7/scoringSound.mp3"></audio>
+
+    <script src="script2.js" defer></script>
+</body>
+</html>
