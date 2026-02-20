@@ -139,8 +139,7 @@ h1, p {
 }
 
 /* Animated bird in Start Screen */
-#start-bird {
-    margin: 30px 0;
+#previewCanvas {
     position: relative;
     animation: bob 2s infinite ease-in-out;
     filter: drop-shadow(0 0 15px #ffd93b);
@@ -302,4 +301,5 @@ h1, p {
         height: 70px;
     }
 }
+
 
