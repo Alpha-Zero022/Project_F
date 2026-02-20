@@ -89,10 +89,9 @@ h1, p {
 /* Score Display */
 #score {
     position: absolute;
-    top: 15px;
-    left: 50%;
+    margin: 20px 30px;
     transform: translateX(-50%);
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     font-family: 'Offside', sans-serif;
     font-weight: 900;
     color: #ffd93b;
@@ -141,8 +140,6 @@ h1, p {
 
 /* Animated bird in Start Screen */
 #start-bird {
-    width: 100px;
-    height: 100px;
     margin: 30px 0;
     position: relative;
     animation: bob 2s infinite ease-in-out;
@@ -252,15 +249,15 @@ h1, p {
 /* Responsive Design */
 @media (max-width: 700px) {
     #game-container {
-        width: 95vw;
-        max-width: 600px;
-        height: auto;
+        width: 70%;
+        max-width: 80%;
         aspect-ratio: 3 / 2;
     }
     
     #myCanvas {
-        width: 100%;
-        height: 100%;
+        width: 70%;
+        max-width: 75%;
+        min-width: 50%;
     }
     
     .controls {
@@ -271,7 +268,6 @@ h1, p {
     
     #score {
         font-size: 2rem;
-        top: 10px;
     }
     
     #start-screen h1 {
@@ -306,3 +302,4 @@ h1, p {
         height: 70px;
     }
 }
+
