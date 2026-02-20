@@ -54,8 +54,8 @@
     }
     
     const flapSound = document.getElementById('flap-sound');
-    if (!flapSound) {
-      console.error('Unable to get flapSound.');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
       return;
     }
     
@@ -67,11 +67,14 @@
     
     const width = canvas.width = 600;
     const height = canvas.height = 400;
-    console.log(width, height);
+    console.log(width, height)
 
     // ========== SPRITE SHEET SETUP ==========
     const birdSprite = new Image();
     birdSprite.src = 'raven_sprite.png';
+
+    const previewBirdSprite = new Image();
+    previewBirdSprite.src = 'raven_sprite.png';
     
     const spriteWidth = 271;
     const spriteHeight = 194;
@@ -90,7 +93,9 @@
     ];
     
     animationStates.forEach((state, index) => {
-        let frames = { loc: [] };
+        let frames = {
+            loc: [],
+        }
         for (let j = 0; j < state.frames; j++) {
             let positionX = j * spriteWidth;
             let positionY = index * spriteHeight;
@@ -99,6 +104,7 @@
         spriteAnimations[state.name] = frames;
     });
     
+    // Dropdown for animation state (if you still have it)
     const dropdown = document.getElementById('animations');
     if (dropdown) {
         dropdown.addEventListener('change', function (e) {
@@ -123,12 +129,12 @@
     const lift = -10.5;
     
     // Bird properties
-    let birdX = 80;
-    let birdScreenX = 80;
+    let birdX = 80; // Bird's world position
+    let birdScreenX = 80; // Bird's position on screen (fixed)
     let birdY = height / 2;
     let birdVelocity = 0;
     const birdRadius = 30;
-    const birdSpeed = 2.5;
+    const birdSpeed = 2.5; // Bird moves forward automatically
     
     // Camera offset
     let cameraX = 0;
@@ -140,128 +146,19 @@
     let pipePassedFlags = [];
 
     const groundHeight = 60;
-    let groundOffset = 0;
-
-    // ========== START SCREEN ANIMATION STATE ==========
-    let startScreenRunning = false;
-    let startScreenFrame = 0;
-    let startScreenAnimId = null;
-
-    // Preview bird hovers at center with a gentle bob
-    const previewBirdX = width / 2;
-    let previewBirdY = height / 2 - 30;
-    let previewBobPhase = 0;
-    const previewBobSpeed = 0.04;
-    const previewBobAmplitude = 12;
-    let previewGlowPhase = 0;
-
-    // ========== START SCREEN LOOP ==========
-    function drawStartScreenBackground() {
-      // Sky gradient
-      const skyGradient = ctx.createLinearGradient(0, 0, 0, height - groundHeight);
-      skyGradient.addColorStop(0, '#87ceeb');
-      skyGradient.addColorStop(1, '#e0f6ff');
-      ctx.fillStyle = skyGradient;
-      ctx.fillRect(0, 0, width, height - groundHeight);
-
-      // Ground
-      const groundY = height - groundHeight;
-      const gradGround = ctx.createLinearGradient(0, groundY, 0, height);
-      gradGround.addColorStop(0, '#5d3a00');
-      gradGround.addColorStop(1, '#a16600');
-      ctx.fillStyle = gradGround;
-      ctx.fillRect(0, groundY, width, groundHeight);
-
-      // Static ground stripes
-      ctx.strokeStyle = '#874f00';
-      ctx.lineWidth = 1;
-      const stripeGap = 5;
-      for (let i = 0; i < width; i += stripeGap) {
-        ctx.beginPath();
-        ctx.moveTo(i, groundY);
-        ctx.lineTo(i + stripeGap / 2, height);
-        ctx.stroke();
-      }
-    }
-
-    function drawPreviewBird(x, y) {
-      // Glow effect
-      const glowRadius = birdRadius * 1.75;
-      const pulse = 0.6 + 0.4 * Math.sin(previewGlowPhase);
-      const glowAlpha = 0.7 * pulse;
-
-      const gradient = ctx.createRadialGradient(x, y, birdRadius / 4, x, y, glowRadius);
-      gradient.addColorStop(0, `rgba(255,223,89,${(glowAlpha * 0.95).toFixed(3)})`);
-      gradient.addColorStop(1, `rgba(255,223,89,0)`);
-
-      ctx.save();
-      ctx.fillStyle = gradient;
-      ctx.beginPath();
-      ctx.arc(x, y, glowRadius, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-
-      // Animated sprite
-      const position = Math.floor(startScreenFrame / staggerFrames) % spriteAnimations[playerState].loc.length;
-      const frameX = spriteAnimations[playerState].loc[position].x;
-      const frameY = spriteAnimations[playerState].loc[position].y;
-
-      const drawWidth = spriteWidth * 0.4;
-      const drawHeight = spriteHeight * 0.4;
-
-      ctx.save();
-      ctx.globalAlpha = 1;
-      ctx.drawImage(
-        birdSprite,
-        frameX, frameY, spriteWidth, spriteHeight,
-        x - drawWidth / 2, y - drawHeight / 2, drawWidth, drawHeight
-      );
-      ctx.restore();
-    }
-
-    function startScreenLoop() {
-      if (!startScreenRunning) return;
-
-      ctx.clearRect(0, 0, width, height);
-      drawStartScreenBackground();
-
-      // Bob the preview bird up and down
-      previewBobPhase += previewBobSpeed;
-      previewGlowPhase += 0.04;
-      const bobY = previewBirdY + Math.sin(previewBobPhase) * previewBobAmplitude;
-
-      drawPreviewBird(previewBirdX, bobY);
-
-      startScreenFrame++;
-      startScreenAnimId = requestAnimationFrame(startScreenLoop);
-    }
-
-    function startStartScreen() {
-      startScreenRunning = true;
-      startScreenFrame = 0;
-      previewBobPhase = 0;
-      previewGlowPhase = 0;
-      startScreenLoop();
-    }
-
-    function stopStartScreen() {
-      startScreenRunning = false;
-      if (startScreenAnimId) {
-        cancelAnimationFrame(startScreenAnimId);
-        startScreenAnimId = null;
-      }
-    }
+    let groundOffset = 0; // For scrolling ground pattern
 
     // ========== PIPE FUNCTIONS ==========
     function createPipe() {
       const minPipeHeight = 50;
       const pipeGap = Math.floor(Math.random() * Math.max(1, (pipeGapMax - pipeGapMin + 1))) + pipeGapMin;
-      console.log(pipeGap);
+      console.log(pipeGap)
         
       const maxAvailable = height - groundHeight - pipeGap - 40;
       const maxPipeHeight = Math.max(minPipeHeight, Math.floor(maxAvailable));
       const pipeTopHeight = Math.floor(Math.random() * (maxPipeHeight - minPipeHeight + 1)) + minPipeHeight;
     
+      // Generate pipe ahead of the bird's world position
       const minX = birdX + 200;
       const maxX = birdX + 300;
       const randomX = Math.floor(Math.random() * (maxX - minX + 1)) + minX;
@@ -283,10 +180,12 @@
 
     // ========== DRAWING FUNCTIONS ==========
     function drawBird() {
+      // Calculate sprite frame
       let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[playerState].loc.length;
       let frameX = spriteAnimations[playerState].loc[position].x;
       let frameY = spriteAnimations[playerState].loc[position].y;
       
+      // Draw glow effect at screen position
       const glowRadius = birdRadius * 1.75;
       const pulse = 0.6 + 0.4 * Math.sin(birdGlowPhase || 0);
       const glowAlpha = Math.max(0, Math.min(1, 0.7 * pulse));
@@ -303,14 +202,17 @@
       ctx.fill();
       ctx.restore();
 
+      // Draw sprite sheet bird at screen position
       ctx.save();
       ctx.globalAlpha = Math.max(0, Math.min(1, birdFade));
       
+      // Center the sprite on birdScreenX, birdY
       const drawWidth = spriteWidth * 0.4;
       const drawHeight = spriteHeight * 0.4;
       
       ctx.drawImage(
-        birdSprite, 
+        birdSprite,
+        previewBirdSprite,
         frameX, frameY, spriteWidth, spriteHeight,
         birdScreenX - drawWidth / 2, birdY - drawHeight / 2, drawWidth, drawHeight
       );
@@ -325,20 +227,21 @@
         if (screenX + pipeWidth < 0 || screenX > width) return;
         
         if (pipe.emerging) {
-          // Upper pipe emerges DOWN from top (clouds)
+          // Upper pipe emerges DOWN from top
           if (pipe.top < pipe.targetTop) {
             pipe.top += pipe.emergeSpeed;
           } else {
             pipe.top = pipe.targetTop;
           }
           
-          // Lower pipe emerges UP from bottom (ground)
+          // Lower pipe emerges UP from bottom
           if (pipe.bottom > pipe.targetBottom) {
             pipe.bottom -= pipe.emergeSpeed;
           } else {
             pipe.bottom = pipe.targetBottom;
           }
           
+          // Check if both pipes finished emerging
           if (pipe.top >= pipe.targetTop && pipe.bottom <= pipe.targetBottom) {
             pipe.emerging = false;
           }
@@ -372,6 +275,7 @@
         }
       });
     }
+    
 
     function drawGround() {
       const groundY = height - groundHeight;
@@ -381,6 +285,7 @@
       ctx.fillStyle = gradGround;
       ctx.fillRect(0, groundY, width, groundHeight);
 
+      // Scrolling ground pattern
       ctx.strokeStyle = '#874f00';
       ctx.lineWidth = 1;
       const stripeGap = 5;
@@ -392,6 +297,7 @@
         ctx.lineTo(i + stripeGap / 2, height);
         ctx.stroke();
       }
+    }
 
     function drawBackground() {
       // Draw sky gradient
@@ -635,7 +541,3 @@
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
 })();
-
-
-
-
