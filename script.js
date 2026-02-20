@@ -488,7 +488,7 @@
     }
 
     function playMusic() {
-      bgMusic.volume = 0.75;
+      bgMusic.volume = 0.50;
       bgMusic.play();
     }
 
@@ -537,5 +537,6 @@
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
 })();
+
 
 
