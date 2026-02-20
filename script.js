@@ -4,24 +4,70 @@
       console.error('Canvas element #myCanvas not found.');
       return;
     }
+    
     const ctx = canvas.getContext('2d');
     if (!ctx) {
       console.error('Unable to get 2D context from canvas.');
       return;
     }
+
+    const startScreen = document.getElementById('start-screen');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
     
     const scoreDiv = document.getElementById('score');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const gameOverDiv = document.getElementById('game-over');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const finalScoreSpan = document.getElementById('final-score');
-    const restartBtn = document.getElementById('restart-btn');
-    const startScreen = document.getElementById('start-screen');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const startBtn = document.getElementById('start-btn');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
+    const restartBtn = document.getElementById('restart-btn');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const bgMusic = document.getElementById('bg-music');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const flapSound = document.getElementById('flap-sound');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
+    
     const scoreSound = document.getElementById('score-sound');
+    if (!scoreDiv) {
+      console.error('Unable to get' + scoreDiv + '.');
+      return;
+    }
     
     const width = canvas.width = 600;
     const height = canvas.height = 400;
+    console.log(width, height)
 
     // ========== SPRITE SHEET SETUP ==========
     const birdSprite = new Image();
@@ -29,6 +75,7 @@
     
     const spriteWidth = 271;
     const spriteHeight = 194;
+    
     let playerState = 'fly';
     let gameFrame = 0;
     const staggerFrames = 4;
@@ -102,6 +149,8 @@
     function createPipe() {
       const minPipeHeight = 50;
       const pipeGap = Math.floor(Math.random() * Math.max(1, (pipeGapMax - pipeGapMin + 1))) + pipeGapMin;
+      console.log(pipeGap)
+        
       const maxAvailable = height - groundHeight - pipeGap - 40;
       const maxPipeHeight = Math.max(minPipeHeight, Math.floor(maxAvailable));
       const pipeTopHeight = Math.floor(Math.random() * (maxPipeHeight - minPipeHeight + 1)) + minPipeHeight;
@@ -462,6 +511,15 @@
       flap();
     }, { passive: false });
 
+    startBtn.addEventListener('click', () => {
+      canvas.classList.add('fade-in');
+      setTimeout(() => {
+        startGame();
+        canvas.classList.remove('fade-in');
+        canvas.focus();
+      }, 500);
+    });
+
     restartBtn.addEventListener('click', () => {
       gameOverDiv.setAttribute('aria-hidden', 'true');
       canvas.classList.add('fade-out');
@@ -476,15 +534,7 @@
       }, 500);
     });
 
-    startBtn.addEventListener('click', () => {
-      canvas.classList.add('fade-in');
-      setTimeout(() => {
-        startGame();
-        canvas.classList.remove('fade-in');
-        canvas.focus();
-      }, 500);
-    });
-
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
   })();
+
