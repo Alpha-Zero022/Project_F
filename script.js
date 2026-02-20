@@ -217,7 +217,7 @@
       const drawHeight = spriteHeight * 0.4;
       
       ctx.drawImage(
-        previewBirdSprite
+        previewBirdSprite,
         frameX, frameY, spriteWidth, spriteHeight,
         birdScreenX - drawWidth / 2, birdY - drawHeight / 2, drawWidth, drawHeight
       );
@@ -587,4 +587,5 @@
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
 })();
+
 
