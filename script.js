@@ -12,8 +12,8 @@
     }
 
     const startScreen = document.getElementById('start-screen');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!startScreen) {
+      console.error('Unable to get' + startScreen + '.');
       return;
     }
     
@@ -24,32 +24,32 @@
     }
     
     const gameOverDiv = document.getElementById('game-over');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!gameOverDiv) {
+      console.error('Unable to get' + gameOverDiv + '.');
       return;
     }
     
     const finalScoreSpan = document.getElementById('final-score');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!finalScoreSpan) {
+      console.error('Unable to get' + finalScoreSpan + '.');
       return;
     }
     
     const startBtn = document.getElementById('start-btn');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!startBtn) {
+      console.error('Unable to get' + startBtn + '.');
       return;
     }
     
     const restartBtn = document.getElementById('restart-btn');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!restartBtn) {
+      console.error('Unable to get' + restartBtn + '.');
       return;
     }
     
     const bgMusic = document.getElementById('bg-music');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!bgMusic) {
+      console.error('Unable to get' + bgMusic + '.');
       return;
     }
     
@@ -60,8 +60,8 @@
     }
     
     const scoreSound = document.getElementById('score-sound');
-    if (!scoreDiv) {
-      console.error('Unable to get' + scoreDiv + '.');
+    if (!scoreSound) {
+      console.error('Unable to get' + scoreSound + '.');
       return;
     }
     
@@ -536,5 +536,6 @@
 
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
-  })();
+})();
+
 
