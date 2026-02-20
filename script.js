@@ -1,4 +1,10 @@
 (() => {
+    const previewCanvas = document.getElementById('previewCanvas');
+    if (!previewCanvas) {
+      console.error('Canvas element #previewCanvas not found.');
+      return;
+    }
+
     const canvas = document.getElementById('myCanvas');
     if (!canvas) {
       console.error('Canvas element #myCanvas not found.');
@@ -70,11 +76,11 @@
     console.log(width, height)
 
     // ========== SPRITE SHEET SETUP ==========
-    const birdSprite = new Image();
-    birdSprite.src = 'raven_sprite.png';
-
     const previewBirdSprite = new Image();
     previewBirdSprite.src = 'raven_sprite.png';
+    
+    const birdSprite = new Image();
+    birdSprite.src = 'raven_sprite.png';
     
     const spriteWidth = 271;
     const spriteHeight = 194;
@@ -179,6 +185,46 @@
     }
 
     // ========== DRAWING FUNCTIONS ==========
+    function drawPreviewBird() {
+      // Calculate sprite frame
+      let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[playerState].loc.length;
+      let frameX = spriteAnimations[playerState].loc[position].x;
+      let frameY = spriteAnimations[playerState].loc[position].y;
+      
+      // Draw glow effect at screen position
+      const glowRadius = birdRadius * 1.75;
+      const pulse = 0.6 + 0.4 * Math.sin(birdGlowPhase || 0);
+      const glowAlpha = Math.max(0, Math.min(1, 0.7 * pulse));
+      const effectiveGlowAlpha = glowAlpha * birdFade;
+      
+      const gradient = ctx.createRadialGradient(birdScreenX, birdY, birdRadius / 4, birdScreenX, birdY, glowRadius);
+      gradient.addColorStop(0, `rgba(255,223,89,${(effectiveGlowAlpha * 0.95).toFixed(3)})`);
+      gradient.addColorStop(1, `rgba(255,223,89,0)`);
+      
+      ctx.save();
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(birdScreenX, birdY, glowRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      // Draw sprite sheet bird at screen position
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, Math.min(1, birdFade));
+      
+      // Center the sprite on birdScreenX, birdY
+      const drawWidth = spriteWidth * 0.4;
+      const drawHeight = spriteHeight * 0.4;
+      
+      ctx.drawImage(
+        previewBirdSprite
+        frameX, frameY, spriteWidth, spriteHeight,
+        birdScreenX - drawWidth / 2, birdY - drawHeight / 2, drawWidth, drawHeight
+      );
+      
+      ctx.restore();
+    }
+    
     function drawBird() {
       // Calculate sprite frame
       let position = Math.floor(gameFrame / staggerFrames) % spriteAnimations[playerState].loc.length;
@@ -211,8 +257,7 @@
       const drawHeight = spriteHeight * 0.4;
       
       ctx.drawImage(
-        birdSprite,
-        previewBirdSprite,
+        birdSprite
         frameX, frameY, spriteWidth, spriteHeight,
         birdScreenX - drawWidth / 2, birdY - drawHeight / 2, drawWidth, drawHeight
       );
@@ -314,6 +359,7 @@
       drawPipes();
       drawGround();
       drawBird();
+      drawPreviewBird();
     }
 
     // ========== COLLISION DETECTION ==========
@@ -541,3 +587,4 @@
     canvas.setAttribute('tabindex', '0');
     canvas.focus();
 })();
+
